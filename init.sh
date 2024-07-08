@@ -2,34 +2,6 @@
 
 export $(grep -v '^#' config.conf | xargs -d '\n')
 
-# Should remove this)
-# declare -A JOB_LIST=(
-#    [aajob1] = "a set of arguments"
-#    [bbjob2] = "another different list"
-#    ...
-# )
-# sorted=($(printf '%s\n' "${!JOB_LIST[@]}"| /bin/sort))
-# for job in "${sorted[@]}"; do
-#    for args in "${job[@]}"; do
-#      echo "Do something with ${arg} in ${job}"
-#    done
-# done
-
-# This works
-# declare -A JOB_LIST=(
-#    ["aajob1"]="a set of arguments"
-#    ["bbjob2"]="another different list"
-# )
-# for key in ${!JOB_LIST[@]}
-# do
-#     for args in ${JOB_LIST[${key}]}; do
-#         echo "Do something with ${args} in ${key}"
-#     done
-# done
-
-
-
-
 #Lazy to use yml parser, so fill those arrays manually if you add/change something
 #Add path to directory here in format:
 #["service_name"]= "elements separated by whitespace"
@@ -202,7 +174,6 @@ EOF
 }
 
 data_filling_from_images(){
-#     docker-compose up --abort-on-container-failure
     APPENDIX_NAME=-temporary-image-for-data-copy
     for SERVICE_NAME in ${!DATA_DIRS[@]}; do
         docker create --name ${COMPOSITION_NAME}${APPENDIX_NAME} ${DOCKER_IMAGES[${SERVICE_NAME}]}
@@ -213,15 +184,6 @@ data_filling_from_images(){
         done
         docker rm ${COMPOSITION_NAME}${APPENDIX_NAME}
     done
-#WIP
-#For each
-# Add in data array (DATA_DIRS) name of image. Iterate through it
-# Get folders from docker-compose file and name of images
-
-# cat ./docker-compose.yml | grep image | cut -d ':' -f 2
-# docker create --name ${COMPOSITION_NAME}${APPENDIX_NAME} some-image
-# docker cp -a ${COMPOSITION_NAME}${APPENDIX_NAME}:/some/dir/file.tmp file.tmp
-# docker rm ${COMPOSITION_NAME}${APPENDIX_NAME}
 }
 
 env_create
