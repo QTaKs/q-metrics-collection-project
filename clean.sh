@@ -1,5 +1,5 @@
-#!/bin/bash
-export $(grep -v '^#' config.conf | xargs -d '\n')
+#!/bin/sh
+. ./config.conf
 
 TO_REMOVE_FILES=(
 ".gitignore"
