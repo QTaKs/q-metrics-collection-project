@@ -14,12 +14,6 @@ services:
             - "\${GRAFANA_PORT}:3000"
         networks:
             - ${COMPOSITION_NAME}-network
-        volumes:
-            - ${DATA_PATH}/grafana/var/lib/grafana:/var/lib/grafana
-            - ${DATA_PATH}/grafana/etc/grafana:/etc/grafana
-            - ${DATA_PATH}/grafana/var/lib/grafana:/var/lib/grafana
-            - ${DATA_PATH}/grafana/usr/share/grafana:/usr/share/grafana
-            - ${DATA_PATH}/grafana/var/log/grafana:/var/log/grafana
 
     prometheus:
         image: prom/prometheus
@@ -30,9 +24,6 @@ services:
             - "\${PROMETHEUS_PORT}:9090"
         networks:
             - ${COMPOSITION_NAME}-network
-        volumes:
-            - ${DATA_PATH}/prometheus/etc/prometheus:/etc/prometheus
-            - ${DATA_PATH}/prometheus/prometheus:/prometheus
 
     nginx:
         image: nginx
@@ -43,9 +34,6 @@ services:
             - "\${NGINX_HTTP_PORT}:80"
             - "\${NGINX_HTTPS_PORT}:443"
             - "\${NGINX_STUB_STATUS_PORT}:8080"
-        volumes:
-            - ${DATA_PATH}/nginx/usr/share/nginx/html:/usr/share/nginx/html
-            - ${DATA_PATH}/nginx/etc/nginx:/etc/nginx
         networks:
             - ${COMPOSITION_NAME}-network
 
@@ -70,8 +58,6 @@ services:
             - "\${PGSQL_PORT}:5432"
         networks:
             - ${COMPOSITION_NAME}-network
-        volumes:
-            - ${DATA_PATH}/postgres/var/lib/postgresql/data:/var/lib/postgresql/data
         environment:
             POSTGRES_USER: "\${PGSQL_USER}"
             POSTGRES_PASSWORD: "\${PGSQL_PASSWORD}"

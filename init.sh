@@ -11,6 +11,45 @@ docker_compose_create(){
     . ./Templates/docker-compose.sh
 }
 
+docker_compose_override_create(){
+# services:
+#     grafana:
+#         image: grafana/grafana-enterprise
+#         volumes:
+#             - ${DATA_PATH}/grafana/etc/grafana:/etc/grafana
+#             - ${DATA_PATH}/grafana/var/lib/grafana:/var/lib/grafana
+#             - ${DATA_PATH}/grafana/usr/share/grafana:/usr/share/grafana
+#             - ${DATA_PATH}/grafana/var/log/grafana:/var/log/grafana
+
+    PIPED_OVERRIDE=( "services:\n" )
+    echo "Creating override file with volumes"
+
+    SERVICE_NAMES=()
+    for SERVICE_NAME in ${!DATA_DIRS[@]} ${!DOCKER_IMAGES[@]}; do
+        SERVICE_NAMES+=( $SERVICE_NAME )
+    done
+
+    SERVICE_NAMES=( $( echo ${SERVICE_NAMES[@]} | sed 's/\ /\n/g' | sort -u | sed 's/\n/\ /g' ) )
+
+    for SERVICE_NAME in ${SERVICE_NAMES[@]}; do
+        PIPED_OVERRIDE+=( "\t$SERVICE_NAME:\n" )
+
+        # Have image
+        if [[ ${!DOCKER_IMAGES[@]} == *"$SERVICE_NAME"* ]]; then
+            PIPED_OVERRIDE+=( "\t\timage: ${DOCKER_IMAGES[${SERVICE_NAME}]}\n" )
+        fi
+        # Have bind-mount dirs
+        if [[ ${!DATA_DIRS[@]} == *"$SERVICE_NAME"* ]]; then
+            PIPED_OVERRIDE+=( "\t\tvolumes:\n" )
+            for BINDING_DIRECTORY in ${DATA_DIRS[${SERVICE_NAME}]}; do
+                PIPED_OVERRIDE+=( "\t\t\t- ${DATA_PATH}/${SERVICE_NAME}${BINDING_DIRECTORY}:${BINDING_DIRECTORY}\n" )
+            done
+        fi
+    done
+
+    echo ${PIPED_OVERRIDE[@]} | sed 's/\\n/\n/g' | sed 's/\\t/\ \ \ /g' > $(dirname "$0")/docker-compose.override.yml
+}
+
 filling_configs(){
     . ./Templates/configs-nginx.sh
     . ./Templates/configs-prometheus.sh
@@ -61,5 +100,6 @@ data_path_parse
 data_make_dirs
 docker_compose_create
 data_filling_from_images
+docker_compose_override_create
 filling_configs
 docker-compose up --abort-on-container-failure

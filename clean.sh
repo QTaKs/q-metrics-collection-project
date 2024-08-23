@@ -3,8 +3,8 @@
 
 TO_REMOVE_FILES=(
 ".gitignore"
-".env"
 "docker-compose.yml"
+"docker-compose.override.yml"
 )
 
 data_path_parse(){
