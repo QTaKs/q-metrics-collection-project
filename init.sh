@@ -12,15 +12,6 @@ docker_compose_create(){
 }
 
 docker_compose_override_create(){
-# services:
-#     grafana:
-#         image: grafana/grafana-enterprise
-#         volumes:
-#             - ${DATA_PATH}/grafana/etc/grafana:/etc/grafana
-#             - ${DATA_PATH}/grafana/var/lib/grafana:/var/lib/grafana
-#             - ${DATA_PATH}/grafana/usr/share/grafana:/usr/share/grafana
-#             - ${DATA_PATH}/grafana/var/log/grafana:/var/log/grafana
-
     PIPED_OVERRIDE=( "services:\n" )
     echo "Creating override file with volumes"
 
@@ -95,6 +86,13 @@ data_filling_from_images(){
     done
 }
 
+create_asp_net_image(){
+    git clone https://github.com/prometheus-net/prometheus-net.git ./aspnet_image_directory
+    docker build -t ${COMPOSITION_NAME}-aspnet-app ./aspnet_image_directory
+
+    #Add to docker-compose
+}
+
 gitignore_create
 data_path_parse
 data_make_dirs
@@ -102,4 +100,5 @@ docker_compose_create
 data_filling_from_images
 docker_compose_override_create
 filling_configs
+create_asp_net_image
 docker-compose up --abort-on-container-failure

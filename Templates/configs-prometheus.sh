@@ -33,4 +33,7 @@ scrape_configs:
     - job_name: "postgres"
       static_configs:
         - targets: ["${COMPOSITION_NAME}_pgsql-exporter:9187"]
+    - job_name: "aspnet"
+      static_configs:
+        - targets: ["${COMPOSITION_NAME}_aspnet-app:9000"]
 EOF

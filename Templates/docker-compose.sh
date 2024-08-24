@@ -75,4 +75,14 @@ services:
             - ${COMPOSITION_NAME}-network
         environment:
             DATA_SOURCE_NAME: "postgresql://\${PGSQL_USER}:\${PGSQL_PASSWORD}@${COMPOSITION_NAME}_postgres:\${PGSQL_PORT}/postgres?sslmode=disable"
+    aspnet-image:
+        image: ${COMPOSITION_NAME}-aspnet-app
+        restart: unless-stopped
+        container_name: "${COMPOSITION_NAME}_aspnet-app"
+        tty: true
+        ports:
+            - "\${ASPNET_PORT}:80"
+            - "\${ASPNET_METRICS_PORT}:5099"
+        networks:
+            - ${COMPOSITION_NAME}-network
 EOF
