@@ -80,9 +80,11 @@ services:
         restart: unless-stopped
         container_name: "${COMPOSITION_NAME}_aspnet-app"
         tty: true
+        hostname: aspnet.image
         ports:
-            - "\${ASPNET_PORT}:80"
-            - "\${ASPNET_METRICS_PORT}:5099"
+            - "\${ASPNET_PORT}:9000"
         networks:
             - ${COMPOSITION_NAME}-network
+        environment:
+            ASPNETCORE_URLS: "http://+:9000"
 EOF

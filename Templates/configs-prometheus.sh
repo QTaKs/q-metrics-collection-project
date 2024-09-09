@@ -2,8 +2,8 @@ echo "Creating prometheus.yml config file"
 cat << EOF > ${DATA_PATH}/prometheus/etc/prometheus/prometheus.yml
 # my global config
 global:
-  scrape_interval: 15s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
-  evaluation_interval: 15s # Evaluate rules every 15 seconds. The default is every 1 minute.
+  scrape_interval: 1s # Set the scrape interval to every 15 seconds. Default is every 1 minute.
+  evaluation_interval: 1s # Evaluate rules every 15 seconds. The default is every 1 minute.
   # scrape_timeout is set to the global default (10s).
 
 # Alertmanager configuration
@@ -22,18 +22,18 @@ rule_files:
 # Here it's Prometheus itself.
 scrape_configs:
   # The job name is added as a label 'job=<job_name>' to any timeseries scraped from this config.
-    - job_name: "prometheus"
+    - job_name: 'prometheus'
     # metrics_path defaults to '/metrics'
     # scheme defaults to 'http'.
       static_configs:
-        - targets: ["${COMPOSITION_NAME}_prometheus:9090"]
-    - job_name: "nginx"
+        - targets: ['${COMPOSITION_NAME}_prometheus:9090']
+    - job_name: 'nginx'
       static_configs:
-        - targets: ["${COMPOSITION_NAME}_nginx-exporter:9113"]
-    - job_name: "postgres"
+        - targets: ['${COMPOSITION_NAME}_nginx-exporter:9113']
+    - job_name: 'postgres'
       static_configs:
-        - targets: ["${COMPOSITION_NAME}_pgsql-exporter:9187"]
-    - job_name: "aspnet"
+        - targets: ['${COMPOSITION_NAME}_postgres-exporter:9187']
+    - job_name: 'aspnet'
       static_configs:
-        - targets: ["${COMPOSITION_NAME}_aspnet-app:9000"]
+        - targets: ['${COMPOSITION_NAME}_aspnet-app:9000']
 EOF

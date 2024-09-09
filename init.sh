@@ -1,6 +1,7 @@
 #!/bin/sh
 
 . ./config.conf
+. ./.env
 
 #Functions
 gitignore_create(){
@@ -88,9 +89,13 @@ data_filling_from_images(){
 
 create_asp_net_image(){
     git clone https://github.com/prometheus-net/prometheus-net.git ./aspnet_image_directory
+#     sed net6.0 -> net8.0
+#     sed -i 's/net6\.0/net8\.0/g' ./aspnet_image_directory/prometheus-net/Sample.Web/Sample.Web.csproj
     docker build -t ${COMPOSITION_NAME}-aspnet-app ./aspnet_image_directory
+}
 
-    #Add to docker-compose
+patch_sql_grafana(){
+    . ./Templates/sql.sh
 }
 
 gitignore_create
@@ -101,4 +106,6 @@ data_filling_from_images
 docker_compose_override_create
 filling_configs
 create_asp_net_image
+docker-compose up --abort-on-container-failure
+patch_sql_grafana
 docker-compose up --abort-on-container-failure
