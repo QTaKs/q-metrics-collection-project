@@ -22,6 +22,6 @@ Steps to run:
     * create ASP.NET docker image, using [this](https://github.com/prometheus-net/prometheus-net.git) repo;
     * patch grafana.db with preconfiguration.
 * Then grafana service stops to spam about migrations, stop docker-compose via CTRL+C or something else. This is needed to create sqlite grafana.db file.
-* Script will patch grafana.db, then start docker-compose again. Now to can connect to grafana browser GUI on [localhost](localhost:3000) (defaults on port 3000)
+* Script will patch grafana.db, then start docker-compose again. Now to can connect to grafana browser GUI on [localhost](http://localhost:3000) (defaults on port 3000)
 
 Script clean.sh will remove all created by init.sh files (except cloned repo and created docker images), run it without root permissions to ensure that it will delete correct files.
