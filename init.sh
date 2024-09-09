@@ -89,8 +89,6 @@ data_filling_from_images(){
 
 create_asp_net_image(){
     git clone https://github.com/prometheus-net/prometheus-net.git ./aspnet_image_directory
-#     sed net6.0 -> net8.0
-#     sed -i 's/net6\.0/net8\.0/g' ./aspnet_image_directory/prometheus-net/Sample.Web/Sample.Web.csproj
     docker build -t ${COMPOSITION_NAME}-aspnet-app ./aspnet_image_directory
 }
 
